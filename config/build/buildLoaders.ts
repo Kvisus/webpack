@@ -1,6 +1,8 @@
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { ModuleOptions } from "webpack";
 import { BuildOptions } from "./types/types";
+import ReactRefreshTypescript from "react-refresh-typescript";
+import { buildBabelLoader } from "./babel/buildBabelLoader";
 
 export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
   const isDev = options.mode === "development";
@@ -47,10 +49,30 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
       "sass-loader",
     ],
   };
+
   const tsLoader = {
     test: /\.tsx?$/,
-    use: "ts-loader",
+    // use: "ts-loader",
+    use: [
+      {
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+          getCustomTransformers: () => ({
+            before: [isDev && ReactRefreshTypescript()].filter(Boolean),
+          }),
+        },
+      },
+    ],
     exclude: /node_modules/,
   };
-  return [assetLoader, scssLoader, tsLoader, svgLoader];
+
+  const babelLoader = buildBabelLoader(options);
+  return [
+    assetLoader,
+    scssLoader,
+    // tsLoader,
+    babelLoader,
+    svgLoader,
+  ];
 }

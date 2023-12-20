@@ -3,13 +3,35 @@ import classes from "./App.module.scss";
 import { Link, Outlet } from "react-router-dom";
 import avatarpng from "@/assets/avatar.png";
 import Cat from "@/assets/cat.svg";
+import { platform } from "os";
 export const App = () => {
   const [count, setCount] = useState(0);
   const increment = () => {
-    setCount(count + 1);
+    // setCount(count + 1);
+    Todo();
   };
+
+  // if (__PLATFORM__ === "desktop") {
+  //   return <div>isDesktop</div>;
+  // }
+  // if (__PLATFORM__ === "mobile") {
+  //   return <div>isMobile</div>;
+  // }
+
+  // if (__ENV__ === "development") {
+  //   return <div>isDevelopment</div>;
+  // }
+
+  function Todo() {
+    Todo2();
+  }
+  function Todo2() {
+    throw new Error();
+  }
+
   return (
-    <div>
+    <div data-testId="App.DataTestId">
+      <h1 data-testId="platform">platform={__PLATFORM__}</h1>
       <div>
         <img width={100} height={100} src={avatarpng} alt="" />
       </div>
